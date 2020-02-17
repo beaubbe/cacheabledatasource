@@ -253,6 +253,14 @@
 
                 // Fetch the contents
                 $xml = $this->__executeDatasource($ds, $param_pool);
+                
+                $xmlErrors = $xml->getChildrenByName('error');
+                if (!empty($xmlErrors)) {
+                    // Data source did not execute cleanly, exit
+                    $context['xml'] = $xml;
+                    $context['param_pool'] = $param_pool;
+                    return;
+                }
 
                 // See what has been added to the param pool
                 $new_params = array_diff_key($param_pool, $old_param_pool);
